@@ -3,23 +3,22 @@ dotenv.config({
     path : './env'
 })
 
-import connectDB from "./db/index.js";
-
-connectDB();
-
-import express from "express";
-
-const app = express();
-
+import app from "./app.js";
 const PORT = process.env.PORT || 8000;
-app.get("/", (req, res) =>{
-    res.send("Hello World")
-}
-)
-app.listen(PORT, () =>{
-    console.log(`Server is running on port: ${PORT}`)
-    console.log(`server URL : http://localhost:${PORT}`)
+
+import connectDB from "./db/index.js";
+connectDB()
+.then(()=>{
+    app.listen(PORT, () =>{
+        console.log(`Server is running on port: ${PORT}`)
+        console.log(`server URL : http://localhost:${PORT}`)
+    })
 })
+.catch((err) => {
+    console.error("Error connecting to database:", err);
+})
+
+
 
 
 // other combined way of doing it directly in index.js
@@ -32,3 +31,4 @@ app.listen(PORT, () =>{
 //         throw error
 //     }
 // })() // executes a function right away
+
